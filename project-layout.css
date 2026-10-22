@@ -1,0 +1,54 @@
+/* Shared structure for project pages: justified rows + aligned text columns.
+   Each version of the site keeps its own colours and typography. */
+.proj{--g:clamp(8px,1vw,16px)}
+
+/* justified image rows: widths follow the aspect ratios, heights are equal */
+.jrow{display:flex;align-items:flex-start;gap:var(--g);margin-top:var(--g)}
+.ji{flex:var(--r) 1 0;min-width:0;aspect-ratio:var(--r);display:flex;flex-direction:column;gap:var(--g)}
+.ji>.fg{flex:1 1 0;min-height:0}
+.ji.st>.fg{flex-basis:0}
+.ji.gr{display:grid;grid-template-columns:repeat(var(--c),minmax(0,1fr))}
+.ji.gr>.fg{min-height:0}
+.proj .ji .fg{height:100%}
+.proj .ji .fg .clip,.proj .cimgs .fg .clip{position:relative;height:100%}
+.proj .cimgs .fg .clip{aspect-ratio:var(--r);height:auto}
+.proj .ji .fg img,.proj .cimgs .fg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.proj .ji .fg.pad img,.proj .cimgs .fg.pad img{object-fit:contain}
+.solo>.ji{width:100%}
+
+/* captions sit on the image so they never change the height of a figure */
+.proj .fg figcaption{position:absolute;left:10px;bottom:10px;right:auto;max-width:calc(100% - 20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;pointer-events:none}
+
+/* text columns: 5 shared rows (heading, subtitle, text, note, images) */
+.crow{display:grid;column-gap:clamp(18px,2.4vw,40px);margin-top:var(--g);align-items:start}
+.crow+.crow,.jrow+.crow{margin-top:clamp(40px,5vw,72px)}
+.crow>.col{display:grid;grid-row:span 5;grid-template-rows:subgrid;align-content:start;margin:0}
+.crow>.col>*{min-width:0}
+.crow>.solo{grid-row:1/span 5;align-self:start}
+.cimgs{display:grid;gap:var(--g);align-self:start;margin-top:18px}
+.cimgs.g2{grid-template-columns:1fr 1fr}
+.cimgs.box{aspect-ratio:var(--box)}
+.proj .cimgs.box .fg,.proj .cimgs.box .fg .clip{height:100%;aspect-ratio:auto}
+.proj .fg.pad .clip{background:#fff}
+.cimgs.g2>:first-child:nth-last-child(odd){grid-column:1/-1}
+.col .note:empty{display:none}
+
+@media (max-width:860px){
+  .crow{grid-template-columns:1fr!important;row-gap:44px}
+  .crow>.col{display:block;grid-row:auto}
+  .crow>.solo{grid-row:auto}
+}
+@media (max-width:560px){
+  .proj{--g:8px}
+  .proj .fg figcaption{font-size:11px;left:6px;bottom:6px;max-width:calc(100% - 12px)}
+}
+@media (hover:none){
+  .proj .fg figcaption{opacity:1;transform:none}
+}
+
+/* cut-out PNGs: no box, no rounding, the whole image visible on the page background */
+.proj .fg.bare .clip{background:transparent!important;border-radius:0!important}
+.proj .fg.bare img{object-fit:contain!important}
+.proj .fg.bare.in:hover img{transform:scale(1.02)}
+.proj .cimgs.cjrow{display:flex;margin-top:18px}
+.proj .cimgs.cjrow .ji .fg .clip{aspect-ratio:auto;height:100%}
