@@ -43,7 +43,10 @@ html.light .ab{opacity:calc(var(--ao,.9)*.6)}
 
 /* ---------- header with progress line ---------- */
 .hd{position:fixed;inset:0 0 auto 0;z-index:40;padding:14px var(--gut) 0;background:linear-gradient(var(--bg) 60%,transparent);transition:background .6s}
-.hd .grid{display:grid;grid-template-columns:1.2fr repeat(3,1fr);align-items:center;padding-bottom:10px}
+.hd .grid{display:grid;grid-template-columns:1.2fr repeat(3,1fr) auto;align-items:center;padding-bottom:10px}
+.lang{font:inherit;font-size:12px;letter-spacing:.06em;color:inherit;background:none;border:1px solid var(--line);border-radius:99px;padding:5px 11px;cursor:pointer;transition:border-color .3s}
+.lang:hover{border-color:var(--ink)}
+.lang span{color:var(--mute)}.lang span.on{color:var(--ink)}
 .logo{display:flex;align-items:center;gap:10px;font-size:13px}
 .hd nav a{font-size:13px;position:relative;display:inline-block}
 .hd nav a::after{content:"";position:absolute;left:0;top:calc(100% + 9px);width:1px;height:6px;background:var(--ink)}
@@ -210,6 +213,7 @@ footer{display:flex;justify-content:space-between;padding:16px var(--gut) 48px;b
 .fg.in:hover img{transform:scale(1.03);transition-duration:.8s}
 .fg.pad .clip{background:#f3f2ef}
 .fg.pad img{padding:clamp(8px,1.2vw,18px)}
+.fg.pad.tight img{padding:0}
 .proj .fg.pad.dkb .clip,.proj .fg.dkb .clip{background:#111}
 .fg figcaption{font-size:12px;color:var(--ink);background:var(--bg);padding:4px 9px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .4s var(--out)}
 .fg:hover figcaption{opacity:1;transform:none}
@@ -237,16 +241,18 @@ html.shot .hl .ln>span{transform:none}
 html.shot .cap,html.shot .hero-top,html.shot .hero-bot{opacity:1}
 html.shot .fg .clip{clip-path:none}
 html.shot .fg img,html.shot .px-l h1 .c{transform:none}
-html.shot 
 .inv-h{display:none}
 @media (max-width:860px){
-  .hd .grid{grid-template-columns:1fr auto auto auto auto;gap:14px}
+  .hd .grid{grid-template-columns:1fr auto auto auto auto auto;gap:14px}
   .hd nav a::after{display:none}
   .hd a.hide-m{display:none}
   /* theme switch moves into the header so nothing floats over the content */
   .corner.l{display:none}
   .inv-h{display:grid;place-items:center;width:40px;height:40px;margin:-8px -10px -8px -4px}
   .inv-h i{width:12px;height:12px;border-radius:50%;border:1px solid var(--ink);background:linear-gradient(90deg,var(--ink) 50%,transparent 50%)}
+  /* language switch: only the language you can switch to */
+  .lang{padding:5px 9px}
+  .lang span.on,.lang .sl{display:none}
   /* opening on phones */
   .hl,.hero-bot{left:var(--gut)}
   .hero-bot{bottom:52px}
@@ -310,7 +316,7 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
 .px-l{position:relative;border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:clamp(22px,2.6vw,40px);display:flex;flex-direction:column;justify-content:space-between;gap:32px;overflow:hidden}
 .px-l::after{content:"";position:absolute;left:clamp(22px,2.6vw,40px);top:24%;bottom:24%;width:1px;background:var(--line);opacity:0}
 .px-l h1{font-weight:300;font-size:clamp(48px,6.2vw,112px);letter-spacing:-.05em;line-height:.92}
-.px-l h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 0 .2em;margin-bottom:-.2em}
+.px-l h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 .1em .2em 0;margin:0 -.1em -.2em 0}
 .px-l h1 .c{display:inline-block;transform:translateY(105%);animation:up .9s var(--out) forwards;animation-delay:calc(150ms + var(--i)*22ms)}
 @keyframes up{to{transform:none}}
 .px-l .sub{display:block;margin-top:14px;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:clamp(24px,2.3vw,38px);letter-spacing:-.01em;line-height:1.05;color:var(--warm)}
@@ -337,11 +343,18 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
 .px-hd p{font-size:clamp(15px,1.15vw,17px);line-height:1.55;color:var(--mute);max-width:60ch}
 .px-hd .ln{height:1px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:18px;width:min(220px,40%)}
 /* text columns become numbered cards */
-.proj .crow{counter-reset:card}
+.proj .px-panel{counter-reset:card}
 .proj .crow>.col{counter-increment:card;border:1px solid var(--line);border-radius:16px;background:var(--panel2);padding:clamp(16px,1.8vw,26px)}
 .proj .crow>.col>h3{border-top:0;padding-top:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);display:flex;gap:10px;align-items:baseline}
 .proj .crow>.col>h3::before{content:"(" counter(card,decimal-leading-zero) ")";color:var(--acc);letter-spacing:0}
 .proj .fg .clip,.proj .ji .fg .clip,.proj .cimgs .fg .clip{border-radius:12px}
+/* one gap between all boxes, same as between the panels; a single image beside a card fills the card's height */
+.proj{--g:clamp(10px,1.2vw,18px)}
+.proj .crow{column-gap:var(--g);align-items:stretch}
+.proj .crow+.crow,.proj .jrow+.crow,.proj .crow+.jrow{margin-top:var(--g)}
+.proj .crow>.solo{align-self:stretch;display:flex;flex-direction:column}
+.proj .crow>.solo>.ji{flex:1 1 auto}
+@media (max-width:860px){.proj .crow{row-gap:var(--g)}}
 /* next project: a warm band */
 .px-next{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;margin:clamp(10px,1.2vw,18px) var(--gut) 0;border-radius:22px;padding:clamp(22px,3vw,44px);color:#fff;background:linear-gradient(100deg,#e8621f 0%,#a33312 55%,#3a120a 100%);overflow:hidden;position:relative}
 .px-next .brk{grid-column:1/-1;color:rgba(255,255,255,.8)}
@@ -376,10 +389,11 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
     <div class="grid">
       <a class="logo" href="#" id="logo">J. Dellanoce</a>
       <nav style="display:contents">
-        <a href="#progetti" data-t="progetti"><span>Progetti</span></a>
-        <a href="#profilo" data-t="profilo"><span>Profilo</span></a>
-        <a href="#contatti" data-t="contatti"><span>Contatti</span></a>
-        <button class="inv-h" id="invH" aria-label="Inverti colori"><i></i></button>
+        <a href="#progetti" data-t="progetti"><span data-i18n="nav_proj">Progetti</span></a>
+        <a href="#profilo" data-t="profilo"><span data-i18n="nav_prof">Profilo</span></a>
+        <a href="#contatti" data-t="contatti"><span data-i18n="nav_cont">Contatti</span></a>
+        <button class="inv-h" id="invH" aria-label="Inverti colori" data-i18n-a="aria-label:invert"><i></i></button>
+        <button class="lang" id="langBtn" aria-label="Italiano / English"><span data-l="it">IT</span><i class="sl"> / </i><span data-l="en">EN</span></button>
       </nav>
     </div>
     <div class="rail"><i id="rail"></i></div>
@@ -389,53 +403,53 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
     <canvas id="glow" aria-hidden="true"></canvas>
     <div class="vign" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
-    <div class="hero-top sm mute"><span>Portfolio — 2023 / 2026</span><span>Milano, Italia</span></div>
+    <div class="hero-top sm mute"><span data-i18n="hero_top">Portfolio — 2023 / 2026</span><span data-i18n="city">Milano, Italia</span></div>
     <div class="hl">
-      <h1><span class="ln" style="--i:0"><span>Progettare spazi</span></span><span class="ln i2" style="--i:1"><span>che raccontano</span></span><span class="ln i3" style="--i:2"><span><em>storie.</em></span></span></h1>
+      <h1 data-i18n="hero_h"><span class="ln" style="--i:0"><span>Progettare spazi</span></span><span class="ln i2" style="--i:1"><span>che raccontano</span></span><span class="ln i3" style="--i:2"><span><em>storie.</em></span></span></h1>
     </div>
-    <p class="cap">[ &nbsp;<b>Interior &amp; Exhibit Design</b> — studente al Politecnico di Milano. Allestimenti, interni e riqualificazioni. &nbsp;]</p>
+    <p class="cap" data-i18n="hero_cap">[ &nbsp;<b>Interior &amp; Exhibit Design</b> — studente al Politecnico di Milano. Allestimenti, interni e riqualificazioni. &nbsp;]</p>
     <div class="hero-bot">
-      <button class="pillw" id="projBtn">I progetti <b>→</b></button>
-      <a class="down" href="#progetti" id="downBtn" aria-label="Scorri ai progetti"><b>↓</b></a>
-      <span class="sm mute" style="min-width:120px;text-align:right">06 progetti</span>
+      <button class="pillw" id="projBtn" data-i18n="btn_proj">I progetti <b>→</b></button>
+      <a class="down" href="#progetti" id="downBtn" aria-label="Scorri ai progetti" data-i18n-a="aria-label:scroll_down"><b>↓</b></a>
+      <span class="sm mute" style="min-width:120px;text-align:right" data-i18n="n_proj">06 progetti</span>
     </div>
   </section>
 
   <section class="works" id="progetti">
     <div class="wstage" id="wstage">
-      <div class="wlab sm"><span>(01) Progetti</span><span class="mute">Scorri per sfogliare</span></div>
+      <div class="wlab sm"><span data-i18n="works_lab">(01) Progetti</span><span class="mute" data-i18n="works_hint">Scorri per sfogliare</span></div>
       <div class="wprog"><i id="wprog"></i></div>
       <div class="track" id="track"></div>
       <div class="wdesc"><p id="wdesc"></p><div class="meta sm mute" id="wmeta"></div></div>
-      <div class="wimg" id="wimg" role="link" tabindex="0" aria-label="Apri il progetto"><span class="open">Apri il progetto ↗</span></div>
+      <div class="wimg" id="wimg" role="link" tabindex="0" aria-label="Apri il progetto" data-i18n-a="aria-label:open_aria"><span class="open" data-i18n="open_proj">Apri il progetto ↗</span></div>
       <div class="wcount"><span class="lbl" id="wcat"></span><span class="n"><span id="wn">01</span><span>06</span></span></div>
     </div>
   </section>
 
   <section class="sec" id="profilo">
    <div class="profstick" id="profStick">
-    <div class="sec-h sm"><span>(02) Profilo</span><span class="mute" id="accHint">Milano — Design degli Interni</span></div>
+    <div class="sec-h sm"><span data-i18n="prof_lab">(02) Profilo</span><span class="mute" id="accHint">Milano — Design degli Interni</span></div>
     <div class="prof">
-      <div class="left rv"><img class="portrait" src="img/ritratto.webp" alt="Ritratto di Jacopo Dellanoce" loading="lazy"></div>
+      <div class="left rv"><img class="portrait" src="img/ritratto.webp" alt="Ritratto di Jacopo Dellanoce" data-i18n-a="alt:portrait" loading="lazy"></div>
       <div>
-        <p class="bio rv">Sono uno studente di Interior Design al Politecnico di Milano. Il mio percorso nasce dalla passione per il disegno e per la progettazione come processo che traduce un’idea in un’opera concreta. Mi interessano l’exhibit design e la riqualificazione di spazi urbani in disuso, temi centrali per una progettazione sostenibile.</p>
+        <p class="bio rv" data-i18n="bio">Sono uno studente di Interior Design al Politecnico di Milano. Il mio percorso nasce dalla passione per il disegno e per la progettazione come processo che traduce un’idea in un’opera concreta. Mi interessano l’exhibit design e la riqualificazione di spazi urbani in disuso, temi centrali per una progettazione sostenibile.</p>
         <div class="acc rv" id="acc">
-          <div class="acc-i open"><button class="acc-b" aria-expanded="true">Formazione <em>+</em></button><div class="acc-c"><div><div class="in">
-            <span class="mute">2023 — oggi</span><span>Politecnico di Milano, Design degli Interni</span>
-            <span class="mute">Diploma</span><span>Liceo Scientifico Vittorio Veneto, Milano</span>
+          <div class="acc-i open"><button class="acc-b" aria-expanded="true" data-k="acc_edu">Formazione <em>+</em></button><div class="acc-c"><div><div class="in">
+            <span class="mute" data-i18n="edu_now">2023 — oggi</span><span data-i18n="edu_poli">Politecnico di Milano, Design degli Interni</span>
+            <span class="mute" data-i18n="edu_dip">Diploma</span><span data-i18n="edu_school">Liceo Scientifico Vittorio Veneto, Milano</span>
           </div></div></div></div>
-          <div class="acc-i"><button class="acc-b" aria-expanded="false">Software <em>+</em></button><div class="acc-c"><div><div class="in">
+          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_soft">Software <em>+</em></button><div class="acc-c"><div><div class="in">
             <div class="chips"><span>AutoCAD</span><span>Revit</span><span>ArchiCAD</span><span>Rhino</span><span>V-Ray</span><span>Blender</span><span>Photoshop</span><span>Illustrator</span><span>InDesign</span><span>Figma</span><span>Miro</span></div>
           </div></div></div></div>
-          <div class="acc-i"><button class="acc-b" aria-expanded="false">Lingue <em>+</em></button><div class="acc-c"><div><div class="in">
-            <span class="mute">Italiano</span><span>Madrelingua (C2)</span>
-            <span class="mute">Inglese</span><span>Intermedio-alto (B2)</span>
+          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_lang">Lingue <em>+</em></button><div class="acc-c"><div><div class="in">
+            <span class="mute" data-i18n="lang_it">Italiano</span><span data-i18n="lang_it_lv">Madrelingua (C2)</span>
+            <span class="mute" data-i18n="lang_en">Inglese</span><span data-i18n="lang_en_lv">Intermedio-alto (B2)</span>
           </div></div></div></div>
-          <div class="acc-i"><button class="acc-b" aria-expanded="false">Metodo <em>+</em></button><div class="acc-c"><div><div class="in">
-            <p>Tutti i progetti sono nati in gruppo: il lavoro in team mi ha insegnato confronto, ascolto e sintesi tra visioni diverse.</p>
+          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_method">Metodo <em>+</em></button><div class="acc-c"><div><div class="in">
+            <p data-i18n="method">Tutti i progetti sono nati in gruppo: il lavoro in team mi ha insegnato confronto, ascolto e sintesi tra visioni diverse.</p>
           </div></div></div></div>
-          <div class="acc-i"><button class="acc-b" aria-expanded="false">Fuori dallo studio <em>+</em></button><div class="acc-c"><div><div class="in">
-            <p>Cinema, musica, mostre e musei: osservo come vengono allestiti e il rapporto tra opere e spazio.</p>
+          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_out">Fuori dallo studio <em>+</em></button><div class="acc-c"><div><div class="in">
+            <p data-i18n="out">Cinema, musica, mostre e musei: osservo come vengono allestiti e il rapporto tra opere e spazio.</p>
           </div></div></div></div>
         </div>
       </div>
@@ -444,29 +458,30 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
   </section>
 
   <section class="sec contact" id="contatti">
-    <div class="sec-h sm"><span>(03) Contatti</span><span class="mute">Tirocini e collaborazioni</span></div>
+    <div class="sec-h sm"><span data-i18n="cont_lab">(03) Contatti</span><span class="mute" data-i18n="cont_hint">Tirocini e collaborazioni</span></div>
     <a class="big-mail rv" href="mailto:jacopo.dellanoce@mail.polimi.it">jacopo.dellanoce<br>@mail.polimi.it</a>
     <div class="crow sm rv">
-      <span class="mute">Milano, Italia</span>
+      <span class="mute" data-i18n="city">Milano, Italia</span>
       <a href="Jacopo-Dellanoce-Portfolio.pdf" target="_blank" rel="noopener">Portfolio PDF ↗</a>
     </div>
   </section>
-  <footer class="sm"><span>© <span id="yr"></span> Jacopo Dellanoce</span><a href="#" id="toTop">Torna su ↑</a></footer>
+  <footer class="sm"><span>© <span id="yr"></span> Jacopo Dellanoce</span><a href="#" id="toTop" data-i18n="to_top">Torna su ↑</a></footer>
 </div>
 
-<button class="corner l inv" id="inv"><i></i><span>Inverti colori</span></button>
+<button class="corner l inv" id="inv"><i></i><span data-i18n="invert">Inverti colori</span></button>
 
 <article class="proj" id="proj" aria-hidden="true"></article>
 
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Immagine ingrandita">
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Immagine ingrandita" data-i18n-a="aria-label:lb_aria">
   <img id="lbImg" alt="">
   <p class="cap sm" id="lbCap"></p>
-  <button class="x" id="lbX">Chiudi ✕</button>
-  <button class="pv" id="lbP">← Prec.</button>
-  <button class="nx" id="lbN">Succ. →</button>
+  <button class="x" id="lbX" data-i18n="lb_close">Chiudi ✕</button>
+  <button class="pv" id="lbP" data-i18n="lb_prev">← Prec.</button>
+  <button class="nx" id="lbN" data-i18n="lb_next">Succ. →</button>
 </div>
 
 <script src="projects.js"></script>
+<script src="en.js"></script>
 <script src="img/sizes.js"></script>
 <script src="project-layout.js"></script>
 <script>
@@ -480,6 +495,26 @@ if(EAGER) document.documentElement.classList.add("shot");
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const splitChars=s=>{let i=0;return s.split(" ").map(w=>`<span class="w">${[...w].map(c=>`<span class="c" style="--i:${i++}">${esc(c)}</span>`).join("")}</span>`).join(" ");};
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.08});
+
+/* ===== language: Italian by default, English from en.js; projects.js always stays in Italian ===== */
+const P_IT=JSON.parse(JSON.stringify(P));
+let LANG="it"; try{ if(localStorage.getItem("jd-lang")==="en") LANG="en"; }catch(e){}
+if(/[?&]lang=en/.test(location.search)) LANG="en";
+const t=k=>UI[LANG][k]??UI.it[k];
+const tr=s=>LANG==="en"&&EN[s]!=null?EN[s]:s;
+// every text of a project; "key|caption" image specs translate only the caption
+const KEEP=["id","n","year","color"];
+const trDeep=(v,k)=>typeof v==="string"?(KEEP.includes(k)?v:v.includes("|")?v.replace(/\|(.*)$/s,(m,c)=>"|"+tr(c)):tr(v))
+  :Array.isArray(v)?v.map(x=>trDeep(x)):v&&typeof v==="object"?Object.fromEntries(Object.entries(v).map(([kk,x])=>[kk,trDeep(x,kk)])):v;
+function applyLang(){
+  document.documentElement.lang=LANG;
+  // the objects in P are kept (the page holds references to them), only their content changes
+  P.forEach((p,i)=>{const src=trDeep(P_IT[i]); Object.keys(p).forEach(k=>delete p[k]); Object.assign(p,src);});
+  document.querySelectorAll("[data-i18n]").forEach(e=>e.innerHTML=t(e.dataset.i18n));
+  document.querySelectorAll("[data-i18n-a]").forEach(e=>{const [a,k]=e.dataset.i18nA.split(":");e.setAttribute(a,t(k));});
+  document.querySelectorAll("#langBtn span").forEach(x=>x.classList.toggle("on",x.dataset.l===LANG));
+}
+applyLang();
 
 /* ===== theme ===== */
 ["inv","invH"].forEach(id=>$(id).addEventListener("click",()=>{
@@ -594,8 +629,8 @@ requestAnimationFrame(tick);
 const profSec=$("profilo"), profStick=$("profStick"), accItems=[...document.querySelectorAll(".acc-i")];
 let accAuto=false, accIdx=0;
 accItems.forEach((x,k)=>{
-  const b=x.querySelector(".acc-b"), label=b.firstChild.textContent.trim();
-  b.innerHTML=`<span><small>${String(k+1).padStart(2,"0")}</small>${label}</span><em>+</em>`;
+  const b=x.querySelector(".acc-b");
+  b.innerHTML=`<span><small>${String(k+1).padStart(2,"0")}</small><span data-i18n="${b.dataset.k}">${t(b.dataset.k)}</span></span><em>+</em>`;
   x.insertAdjacentHTML("beforeend",`<i class="pg" aria-hidden="true"></i>`);
 });
 function openAcc(i){
@@ -610,7 +645,7 @@ function sizeProf(){
   // only when the whole block fits on screen (desktop); otherwise the items open on click
   accAuto=innerWidth>860 && profStick.offsetHeight+90<innerHeight && !/[?&]noacc/.test(location.search);
   if(accAuto){ profSec.style.height=(innerHeight+accItems.length*innerHeight*.55)+"px"; profStick.classList.add("stick"); }
-  $("accHint").textContent=accAuto?"Scorri per sfogliare ↓":"Milano — Design degli Interni";
+  $("accHint").textContent=accAuto?t("prof_scroll"):t("prof_hint");
   updAcc();
 }
 const ACQ=location.search.match(/[?&]acc=(\d)/); // ?acc=3 freezes the accordion on that item (screenshots)
@@ -631,6 +666,12 @@ sizeProf();
 if(ACQ){ openAcc(+ACQ[1]); accItems[+ACQ[1]].style.setProperty("--k",.5); }
 
 $("projBtn").addEventListener("click",()=>$("progetti").scrollIntoView({behavior:"smooth"}));
+$("langBtn").addEventListener("click",()=>{
+  LANG=LANG==="it"?"en":"it";
+  try{localStorage.setItem("jd-lang",LANG)}catch(e){}
+  applyLang(); wcur=-1; sizeProf();
+  if(open){ const st=proj.scrollTop; render(open); proj.scrollTop=st; proj.dispatchEvent(new Event("scroll")); document.title=`${open.title} — Jacopo Dellanoce`; }
+});
 
 /* ===== nav ===== */
 $("logo").addEventListener("click",e=>{e.preventDefault();if(open)closeProject();scrollTo({top:0,behavior:"smooth"});});
@@ -655,14 +696,14 @@ function render(p){
   const intro=PL.intro(p,LB);
   const panel=(k,name,title,text,body)=>`
     <section class="px-panel chap" data-name="${esc(name)}">
-      <div class="px-bar"><span class="brk">${p.cat} design · Tavola ${pad(k+1)} / ${pad(N)}</span><span class="brk">${esc(p.title)}</span></div>
+      <div class="px-bar"><span class="brk">${p.cat} design · ${t("board")} ${pad(k+1)} / ${pad(N)}</span><span class="brk">${esc(p.title)}</span></div>
       <div class="px-hd"><h2>${title}</h2>${text?`<div><p class="rv">${text}</p><div class="ln"></div></div>`:`<div><div class="ln"></div></div>`}</div>
       ${body}
     </section>`;
   const chaps=p.chapters.map((c,k)=>panel(k+1,c.title,accentTitle(c.title),c.t,PL.rows(p,c,LB))).join("");
-  const stats=[[p.year,"Anno accademico"],[pad(p.team.length),p.team.length>1?"Progettisti":"Progettista"],[pad(N),"Tavole"],[pad(LB.length),"Immagini"]];
+  const stats=[[p.year,t("year")],[pad(p.team.length),p.team.length>1?t("designers"):t("designer")],[pad(N),t("boards")],[pad(LB.length),t("images")]];
   proj.innerHTML=`
-    <div class="pbar sm"><a class="back" href="#" id="projBack"><span>←</span> Tutti i progetti</a>
+    <div class="pbar sm"><a class="back" href="#" id="projBack"><span>←</span> ${t("back")}</a>
       <span class="now" id="now">${p.n} — ${p.title}</span><span class="r mute">${p.cat} · ${p.year}</span>
       <span class="rail"><i id="prog"></i></span></div>
     <header class="px-hero">
@@ -670,16 +711,16 @@ function render(p){
         <span class="brk">${p.n} — ${p.cat} design</span>
         <div><h1>${splitChars(p.title)}</h1><span class="sub">${p.sub}</span></div>
         <p class="lead">${p.short}</p>
-        <dl><dt>Corso</dt><dd>${p.course}</dd><dt>Docenti</dt><dd>${p.teachers}</dd><dt>Progettisti</dt><dd>${team}</dd></dl>
+        <dl><dt>${t("course")}</dt><dd>${p.course}</dd><dt>${t("teachers")}</dt><dd>${p.teachers}</dd><dt>${t("designers")}</dt><dd>${team}</dd></dl>
       </div>
       <div class="px-r" id="pcover"><img src="${cover(p)}" alt="${esc(p.title)}">
         <span class="tag">${p.sub} · ${p.year}</span></div>
     </header>
     <div class="px-stats">${stats.map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div>
-    ${panel(0,"Il progetto","Il <em>progetto</em>","",intro)}
+    ${panel(0,t("the_project_name"),t("the_project"),"",intro)}
     ${chaps}
-    <a class="px-next" href="#/${next.id}" id="pnext"><span class="brk">Progetto successivo — ${next.n} · ${next.cat} design</span><b>${next.title} →</b><img src="${cover(next,true)}" alt=""></a>
-    <div class="pfoot sm"><span>© Jacopo Dellanoce</span><a href="#" id="pTop">Torna su ↑</a></div>`;
+    <a class="px-next" href="#/${next.id}" id="pnext"><span class="brk">${t("next")} — ${next.n} · ${next.cat} design</span><b>${next.title} →</b><img src="${cover(next,true)}" alt=""></a>
+    <div class="pfoot sm"><span>© Jacopo Dellanoce</span><a href="#" id="pTop">${t("to_top")}</a></div>`;
   proj.querySelectorAll(".rv,.fg").forEach(el=>io.observe(el));
   proj.querySelectorAll(".fg").forEach(f=>f.addEventListener("click",()=>openLb(+f.dataset.i)));
   $("projBack").addEventListener("click",e=>{e.preventDefault();closeProject();});

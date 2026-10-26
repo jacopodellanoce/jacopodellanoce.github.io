@@ -27,7 +27,7 @@
   function fig(p, spec, LB, r, extraStyle) {
     const o = parse(spec);
     const i = LB.push({ s: `${PL.base}${p.id}/${o.k}.webp`, c: o.cap, pad: !!o.pad }) - 1;
-    return `<figure class="fg${o.pad ? " pad" : ""}${o.dk ? " dkb" : ""}${o.bare ? " bare" : ""}" data-i="${i}" ${PL.figAttr} style="--r:${r.toFixed(4)};${extraStyle || ""}">` +
+    return `<figure class="fg${o.pad ? " pad" : ""}${o.dk ? " dkb" : ""}${o.bare ? " bare" : ""}${o.tight ? " tight" : ""}" data-i="${i}" ${PL.figAttr} style="--r:${r.toFixed(4)};${extraStyle || ""}">` +
       `<div class="clip"><img src="${PL.base}${p.id}/${o.k}-t.webp" alt="${esc(o.cap || p.title)}" loading="${PL.eager ? "eager" : "lazy"}"></div>` +
       (o.cap ? `<figcaption>${esc(o.cap)}</figcaption>` : "") + `</figure>`;
   }
@@ -78,10 +78,11 @@
   }
 
   function crow(p, items, cols, LB, labels) {
+    // explicit columns: the solo's fixed grid-row would otherwise make auto-placement put it first
     return `<div class="crow" style="grid-template-columns:${cols}">` + items.map((it, n) => {
-      if (isText(it)) return col(p, it, LB, labels && labels[n]);
+      if (isText(it)) return col(p, it, LB, labels && labels[n]).replace(`<div class="col rv">`, `<div class="col rv" style="grid-column:${n + 1}">`);
       const j = jItem(p, it, LB);
-      return `<div class="solo">${j.html}</div>`;
+      return `<div class="solo" style="grid-column:${n + 1}">${j.html}</div>`;
     }).join("") + `</div>`;
   }
 

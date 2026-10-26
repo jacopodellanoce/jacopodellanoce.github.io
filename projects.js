@@ -22,26 +22,42 @@ const P = [
     team: ["Noè Bartolini", "Jacopo Dellanoce", "Luca Mastromatteo", "Anton Qerkini", "Filippo Antonio Visentin"],
     intro: [
       { h: "Sito di progetto", t: "La mostra, situata nel complesso museale di Santa Chiara a San Gimignano in Toscana, costruisce un percorso in sei sale in cui opere antiche e contemporanee dialogano direttamente, rivelando continuità formali e simboliche tra la civiltà etrusca e il mondo contemporaneo.", imgs: ["sito|L’allestimento nel complesso di Santa Chiara"] },
-      { h: "Concept", t: "Sconfinare è la metafora utilizzata per la progettazione dell’allestimento. L’obiettivo è quello di far comprendere come la civiltà etrusca sia sconfinata nell’era moderna grazie agli innumerevoli spunti di riflessione da essa derivanti. Sono presenti artefatti antichi e moderni, messi in confronto in modo che sembrino gradualmente della stessa epoca. Nell’allestimento il confine è visto come un Oltre, che perde il valore di divisione nel tempo e nello spazio.", imgs: [{ img: "concept|Il confine visto come Oltre: progressiva rottura dei confini", pad: true }] },
+      { h: "Concept", t: "Sconfinare è la metafora utilizzata per la progettazione dell’allestimento. L’obiettivo è quello di far comprendere come la civiltà etrusca sia sconfinata nell’era moderna grazie agli innumerevoli spunti di riflessione da essa derivanti. Sono presenti artefatti antichi e moderni, messi in confronto in modo che sembrino gradualmente della stessa epoca. Nell’allestimento il confine è visto come un Oltre, che perde il valore di divisione nel tempo e nello spazio.", imgs: [{ img: "concept|Il confine visto come Oltre: progressiva rottura dei confini", pad: true, tight: true }] },
       { h: "Tema", t: "La mostra nasce dal desiderio di unire linguaggi e tempi diversi attraverso la metafora del confine. L’allestimento costruisce un percorso in cui opere antiche e contemporanee dialogano direttamente. Ogni sala diventa una soglia da attraversare, dove le forme si rispecchiano e le identità culturali si sovrappongono. La curatela invita a riconoscere che il passato non è distante, ma una presenza che nutre costantemente il nostro sguardo.", imgs: ["tema|Arte e Guerra, la Chimera"] },
     ],
     chapters: [
-      { title: "Sezioni, pianta ed esploso", rows: [
-        { g: "repeat(4,1fr)", items: ["sez1|Sezione, prima sala", "sez2|Sezione, seconda sala", "sez3|Sezione, terza sala", "sez4|Sezione, quinta e sesta sala"] },
-        { g: "2fr 3fr", items: [{ img: "esploso|Esploso assonometrico", pad: true }, { grid: [{ img: "pia1|Pianta, prima sala", pad: true }, { img: "pia2|Pianta, seconda sala", pad: true }, { img: "pia3|Pianta, terza sala", pad: true }, { img: "pia4|Pianta, quinta e sesta sala", pad: true }], c: 2 }] },
-      ] },
       { title: "Le sale", rows: [
-        { g: "1fr 1fr 1fr", items: [
-          { h: "Prima sala", sub: "Quotidianità I: il vasellame", t: "La sala esplora la quotidianità attraverso il vasellame, affiancando reperti etruschi alle opere di Picasso, Gio Ponti e Mario Schifano. Le corrispondenze formali e concettuali mostrano come l’eredità mediterranea attraversi la storia del design e dell’arte moderna.", note: "Confine netto e definito, percorso obbligato", imgs: ["sala1|Prima sala"] },
-          { h: "Seconda sala", sub: "Quotidianità II: la moda e la cura del corpo", t: "La sala affronta moda, cura del corpo e profumi, temi centrali nella cultura etrusca e ancora attuali. Ai contenitori per unguenti e agli oggetti rituali si affiancano le illustrazioni di Maddalena Sisto e capi contemporanei ispirati ai drappeggi antichi.", note: "Confine rotto a metà, percorso semi-libero", imgs: ["sala2|Seconda sala"] },
-          { h: "Terza sala", sub: "Arte e Guerra: opere d’arte e artefatti bellici", t: "Statue votive, armi e bronzi etruschi dialogano con le opere di Marino Marini, Giacometti e Giacomo Verde. Ne risulta un ambiente sospeso nel tempo, dove le figure antiche sembrano moderne e quelle moderne sembrano provenire da un’archeologia futura.", note: "Confini distribuiti in tutto lo spazio, percorso libero", imgs: ["sala3|Terza sala"] },
+        { g: "", items: [{ img: "esploso|Esploso assonometrico", pad: true }, { img: "piantagen|Pianta generale", pad: true }] },
+        { g: "2fr 3fr", items: [
+          { h: "Prima sala", sub: "Quotidianità I: il vasellame", t: "La sala esplora la quotidianità attraverso il vasellame, affiancando reperti etruschi alle opere di Picasso, Gio Ponti e Mario Schifano. Le corrispondenze formali e concettuali mostrano come l’eredità mediterranea attraversi la storia del design e dell’arte moderna.", note: "Confine netto e definito, percorso obbligato" },
+          "sala1|Prima sala",
         ] },
-        { g: "1fr 1fr 1fr", items: [
-          { h: "Quarta sala", sub: "La morte", t: "La sala ricostruisce la Tomba degli Auguri, riletta da Schifano. Antico e contemporaneo si fondono in un’unica immagine, invitando a riflettere sul ruolo del rito e sul linguaggio della memoria.", note: "Confine oltrepassato dal soggetto del quadro che torna ambiente", imgs: ["sala4|Quarta sala"] },
-          { h: "Quinta e sesta sala", sub: "Etruschi nella modernità", t: "Le ultime sale propongono i cataloghi delle mostre moderne fondamentali sugli Etruschi, esposti in ordine cronologico.", note: "Confine rotto a metà, percorso semi-libero", imgs: ["sala5|Quinta e sesta sala"] },
-          { h: "Corridoio", sub: "Passaggio tra antico e moderno", t: "Il corridoio collega le sale e accompagna il visitatore da un’epoca all’altra.", imgs: ["corridoio|Corridoio"] },
+        { g: "", items: [{ img: "pia1|Pianta, prima sala", pad: true }, { img: "sez1|Sezione, prima sala", pad: true }] },
+        { g: "2fr 3fr", items: [
+          { h: "Seconda sala", sub: "Quotidianità II: la moda e la cura del corpo", t: "La sala affronta moda, cura del corpo e profumi, temi centrali nella cultura etrusca e ancora attuali. Ai contenitori per unguenti e agli oggetti rituali si affiancano le illustrazioni di Maddalena Sisto e capi contemporanei ispirati ai drappeggi antichi.", note: "Confine rotto a metà, percorso semi-libero" },
+          "sala2|Seconda sala",
         ] },
-        { g: "1fr 1fr", items: ["soglia|La soglia di fili", "sala3b|Arte e Guerra, vista d’insieme"] },
+        { g: "", items: [{ img: "pia2|Pianta, seconda sala", pad: true }, { img: "sez2|Sezione, seconda sala", pad: true }] },
+        { g: "2fr 3fr", items: [
+          { h: "Terza sala", sub: "Arte e Guerra: opere d’arte e artefatti bellici", t: "Statue votive, armi e bronzi etruschi dialogano con le opere di Marino Marini, Giacometti e Giacomo Verde. Ne risulta un ambiente sospeso nel tempo, dove le figure antiche sembrano moderne e quelle moderne sembrano provenire da un’archeologia futura.", note: "Confini distribuiti in tutto lo spazio, percorso libero" },
+          "sala3|Terza sala",
+        ] },
+        { g: "", items: [{ img: "pia3|Pianta, terza sala", pad: true }, { img: "sez3|Sezione, terza sala", pad: true }] },
+        { g: "", items: ["sala3b|Arte e Guerra, vista d’insieme"] },
+        { g: "2fr 3fr", items: [
+          { h: "Quarta sala", sub: "La morte", t: "La sala ricostruisce la Tomba degli Auguri, riletta da Schifano. Antico e contemporaneo si fondono in un’unica immagine, invitando a riflettere sul ruolo del rito e sul linguaggio della memoria.", note: "Confine oltrepassato dal soggetto del quadro che torna ambiente" },
+          "sala4|Quarta sala",
+        ] },
+        { g: "2fr 3fr", items: [
+          { h: "Quinta e sesta sala", sub: "Etruschi nella modernità", t: "Le ultime sale propongono i cataloghi delle mostre moderne fondamentali sugli Etruschi, esposti in ordine cronologico.", note: "Confine rotto a metà, percorso semi-libero" },
+          "sala5|Quinta e sesta sala",
+        ] },
+        { g: "", items: [{ img: "pia4|Pianta, quinta e sesta sala", pad: true }, { img: "sez4|Sezione, quinta e sesta sala", pad: true }] },
+        { g: "", items: ["soglia|La soglia di fili"] },
+        { g: "2fr 3fr", items: [
+          { h: "Corridoio", sub: "Passaggio tra antico e moderno", t: "Il corridoio collega le sale e accompagna il visitatore da un’epoca all’altra." },
+          "corridoio|Corridoio",
+        ] },
       ] },
       { title: "Partitura allestitiva", t: "La partitura allestitiva è uno strumento di lettura sintetica del progetto, capace di restituire in un unico apparato grafico le logiche compositive che regolano l’intera mostra, sala per sala. Il sistema sovrappone cinque livelli di analisi: organizzazione dei contenuti, distribuzione spaziale, artefatti espositivi, interazione tra visitatore e allestimento, tempo di percorrenza. La partitura rende esplicito il criterio con cui ogni sala calibra densità dei contenuti, tempo di permanenza e grado di coinvolgimento del visitatore.", rows: [
         { g: "1fr", items: ["partitura|Partitura allestitiva"] },

@@ -37,6 +37,7 @@
   .crow{grid-template-columns:1fr!important;row-gap:44px}
   .crow>.col{display:block;grid-row:auto}
   .crow>.solo{grid-row:auto}
+  .crow>*{grid-column:auto!important}
 }
 @media (max-width:560px){
   .proj{--g:8px}
