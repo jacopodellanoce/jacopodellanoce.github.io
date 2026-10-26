@@ -271,6 +271,7 @@ html.shot .fg img,html.shot .px-l h1 .c{transform:none}
   .wdesc p{font-size:15px}
   .wdesc .meta{display:none}
   .wlab{top:76px}
+  .wstage{touch-action:pan-y}
   .prof{grid-template-columns:1fr}
   .prof .left{position:static}
   .ph{grid-template-columns:1fr}
@@ -588,11 +589,30 @@ const wims=[...wimg.querySelectorAll("img")];
 wts.forEach(t=>t.addEventListener("click",()=>{ const i=+t.dataset.i; scrollToWork(i); }));
 let wpos=0, wcur=-1;
 const WQ=location.search.match(/[?&]w=([\d.]+)/), WF=WQ?parseFloat(WQ[1]):null; // ?w=2.4 freezes the works section there (screenshots)
-function scrollToWork(i){ const r=works.getBoundingClientRect(); const tot=works.offsetHeight-innerHeight; scrollTo({top:scrollY+r.top+tot*(i/(P.length-1)),behavior:"smooth"}); }
-wimg.addEventListener("click",()=>openProject(Math.round(wpos),wims[Math.round(wpos)]));
+// phones: the projects are browsed with a horizontal swipe; the section is one screen tall
+const SWIPE=()=>innerWidth<860&&matchMedia("(pointer:coarse)").matches;
+let sw=0, swT=0, swDrag=false, swMoved=0;
+function scrollToWork(i){ if(SWIPE()){ swT=clamp(i,0,P.length-1); return; } const r=works.getBoundingClientRect(); const tot=works.offsetHeight-innerHeight; scrollTo({top:scrollY+r.top+tot*(i/(P.length-1)),behavior:"smooth"}); }
+wimg.addEventListener("click",()=>{ if(performance.now()-swMoved<350) return; openProject(Math.round(wpos),wims[Math.round(wpos)]); });
+{
+  const stage=$("wstage"); let x0=0, y0=0, s0=0, mode=null, lx=0, lt=0, v=0;
+  stage.addEventListener("touchstart",e=>{ if(!SWIPE()) return; const t=e.touches[0]; x0=lx=t.clientX; y0=t.clientY; s0=sw; lt=performance.now(); v=0; mode=null; },{passive:true});
+  stage.addEventListener("touchmove",e=>{
+    if(!SWIPE()) return; const t=e.touches[0], dx=t.clientX-x0, dy=t.clientY-y0;
+    if(!mode&&Math.hypot(dx,dy)>8) mode=Math.abs(dx)>Math.abs(dy)?"h":"v";
+    if(mode!=="h") return;
+    const now=performance.now(), step=innerWidth*.62;
+    v=(t.clientX-lx)/Math.max(1,now-lt); lx=t.clientX; lt=now;
+    swDrag=true; sw=clamp(s0-dx/step,-.35,P.length-1+.35); swMoved=now;
+  },{passive:true});
+  const end=()=>{ if(mode==="h"){ swT=clamp(Math.round(sw-(Math.abs(v)>.35?Math.sign(v)*.5:0)),0,P.length-1); swMoved=performance.now(); } swDrag=false; mode=null; };
+  stage.addEventListener("touchend",end); stage.addEventListener("touchcancel",end);
+}
 wimg.addEventListener("keydown",e=>{if(e.key==="Enter")openProject(Math.round(wpos),wims[Math.round(wpos)]);});
-// a shorter scroll per project on phones
-function sizeWorks(){ works.style.height=(P.length*(innerWidth<860?50:70)+30)+"vh"; }
+function sizeWorks(){
+  works.style.height=SWIPE()?"100svh":(P.length*70+30)+"vh";
+  const h=document.querySelector(".wlab .mute"); h.dataset.i18n=SWIPE()?"works_swipe":"works_hint"; h.textContent=t(h.dataset.i18n);
+}
 sizeWorks(); addEventListener("resize",sizeWorks);
 function setActive(i){
   if(i===wcur) return; wcur=i; const p=P[i];
@@ -608,15 +628,16 @@ function tick(now){
 
   // works
   const r=works.getBoundingClientRect(), tot=works.offsetHeight-innerHeight;
-  const prog=clamp(-r.top/tot,0,1);
-  wpos=WF ?? prog*(P.length-1);
+  let prog;
+  if(SWIPE()){ if(!swDrag) sw+=(swT-sw)*.16; prog=sw/(P.length-1); wpos=WF ?? clamp(sw,-.35,P.length-1+.35); }
+  else { prog=clamp(-r.top/tot,0,1); wpos=WF ?? prog*(P.length-1); }
   const cw=innerWidth<860?innerWidth*.62:innerWidth*.3;
   track.style.setProperty("--cw",cw+"px");
   track.style.transform=`translateX(${innerWidth/2-cw/2-wpos*cw}px)`;
   wts.forEach((t,i)=>t.style.setProperty("--f",clamp(1-Math.abs(wpos-i)*1.6,0,1).toFixed(3)));
   wims.forEach((im,i)=>{ if(i===0) return; const v=clamp(wpos-(i-1),0,1); im.style.clipPath=`inset(0 0 0 ${(1-v)*100}%)`; });
-  setActive(Math.round(wpos));
-  $("wprog").style.transform=`scaleX(${prog})`;
+  setActive(clamp(Math.round(wpos),0,P.length-1));
+  $("wprog").style.transform=`scaleX(${clamp(prog,0,1)})`;
 
   // header rail = page progress
   const max=document.documentElement.scrollHeight-innerHeight;
