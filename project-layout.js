@@ -28,7 +28,8 @@
     const o = parse(spec);
     const i = LB.push({ s: `${PL.base}${p.id}/${o.k}.webp`, c: o.cap, pad: !!o.pad }) - 1;
     return `<figure class="fg${o.pad ? " pad" : ""}${o.dk ? " dkb" : ""}${o.bare ? " bare" : ""}${o.tight ? " tight" : ""}" data-i="${i}" ${PL.figAttr} style="--r:${r.toFixed(4)};${extraStyle || ""}">` +
-      `<div class="clip"><img src="${PL.base}${p.id}/${o.k}-t.webp" alt="${esc(o.cap || p.title)}" loading="${PL.eager ? "eager" : "lazy"}"></div>` +
+      // pos: object-position for a cropped image (which part stays in view)
+      `<div class="clip"><img src="${PL.base}${p.id}/${o.k}-t.webp" alt="${esc(o.cap || p.title)}"${o.pos ? ` style="object-position:${o.pos}"` : ""} loading="${PL.eager ? "eager" : "lazy"}"></div>` +
       (o.cap ? `<figcaption>${esc(o.cap)}</figcaption>` : "") + `</figure>`;
   }
 
@@ -38,7 +39,8 @@
   // ---- justified items ----
   function jItem(p, it, LB) {
     if (typeof it === "string" || it.img) {
-      const r = ratio(p, parse(it).k);
+      // r: box ratio set by hand (a bare image stays whole inside it)
+      const r = it.r || ratio(p, parse(it).k);
       return { r, html: `<div class="ji" style="--r:${r.toFixed(4)}">${fig(p, it, LB, r)}</div>` };
     }
     if (it.stack) {
@@ -47,13 +49,13 @@
       const figs = it.stack.map((s, n) => fig(p, s, LB, ratio(p, parse(s).k), `flex-grow:${inv[n].toFixed(4)}`)).join("");
       return { r, html: `<div class="ji st" style="--r:${r.toFixed(4)}">${figs}</div>` };
     }
-    // small grid of c columns
+    // small grid of c columns (cell:r forces every cell to that ratio)
     const c = it.c || 2, rows = [];
     for (let n = 0; n < it.grid.length; n += c) rows.push(it.grid.slice(n, n + c));
-    const rowH = rows.map(rw => rw.reduce((a, s) => a + 1 / ratio(p, parse(s).k), 0) / rw.length);
+    const rowH = rows.map(rw => it.cell ? 1 / it.cell : rw.reduce((a, s) => a + 1 / ratio(p, parse(s).k), 0) / rw.length);
     const r = c / rowH.reduce((a, b) => a + b, 0);
-    const figs = it.grid.map(s => fig(p, s, LB, ratio(p, parse(s).k))).join("");
-    return { r, html: `<div class="ji gr" style="--r:${r.toFixed(4)};--c:${c};grid-template-rows:${rowH.map(h => h.toFixed(4) + "fr").join(" ")}">${figs}</div>` };
+    const figs = it.grid.map(s => fig(p, s, LB, it.cell || ratio(p, parse(s).k))).join("");
+    return { r, html: `<div class="ji gr" style="--r:${r.toFixed(4)};--c:${c};grid-template-rows:${rowH.map(h => (h / rowH.reduce((a, b) => a + b, 0)).toFixed(4) + "fr").join(" ")}">${figs}</div>` };
   }
 
   // ---- text column with 5 aligned slots ----
@@ -61,7 +63,8 @@
     const ts = c.t ? (Array.isArray(c.t) ? c.t : [c.t]) : [];
     const ims = c.imgs || [];
     const g2 = c.grid && ims.length > 1;
-    return `<div class="col rv">` +
+    // no sub/text/note: drop the empty subgrid gaps so the images sit right under the heading
+    return `<div class="col rv${!c.sub && !ts.length && !c.note ? " notx" : ""}">` +
       (c.h ? `<h3>${label ? `<i>${label}</i>` : ""}${c.h}</h3>` : `<div></div>`) +
       (c.sub ? `<p class="sb">${c.sub}</p>` : `<div></div>`) +
       `<div class="tx">${ts.map(t => `<p>${t}</p>`).join("")}</div>` +
@@ -69,11 +72,12 @@
       // grid:true → all images share one 4:3 box (so every column's image block has the same size);
       // otherwise each image is 4:3 and they stack
       // grid:true with natural images → side by side at the same height, nothing cropped
-      (g2 && ims.every(s => parse(s).natural)
+      (!ims.length ? `<div></div>`
+        : g2 && ims.every(s => parse(s).natural)
         ? `<div class="cimgs cjrow jrow">${ims.map(s => jItem(p, s, LB).html).join("")}</div>`
         : g2
         ? `<div class="cimgs g2 box" style="--box:${PL.colRatio};grid-template-rows:repeat(${Math.ceil(ims.length / 2)},minmax(0,1fr))">${ims.map(s => fig(p, s, LB, parse(s).natural ? ratio(p, parse(s).k) : PL.colRatio)).join("")}</div>`
-        : `<div class="cimgs">${ims.map(s => fig(p, s, LB, parse(s).natural ? ratio(p, parse(s).k) : PL.colRatio)).join("")}</div>`) +
+        : `<div class="cimgs">${ims.map(s => fig(p, s, LB, parse(s).r || (parse(s).natural ? ratio(p, parse(s).k) : PL.colRatio))).join("")}</div>`) +
       `</div>`;
   }
 
@@ -82,7 +86,7 @@
     return `<div class="crow" style="grid-template-columns:${cols}">` + items.map((it, n) => {
       if (isText(it)) return col(p, it, LB, labels && labels[n]).replace(`<div class="col rv">`, `<div class="col rv" style="grid-column:${n + 1}">`);
       const j = jItem(p, it, LB);
-      return `<div class="solo" style="grid-column:${n + 1}">${j.html}</div>`;
+      return `<div class="solo${it.top ? " top" : ""}${it.bottom ? " bot" : ""}${it.middle ? " mid" : ""}" style="grid-column:${it.col || n + 1}">${j.html}</div>`;
     }).join("") + `</div>`;
   }
 

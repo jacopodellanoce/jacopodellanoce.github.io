@@ -24,7 +24,12 @@
 .crow+.crow,.jrow+.crow{margin-top:clamp(40px,5vw,72px)}
 .crow>.col{display:grid;grid-row:span 5;grid-template-rows:subgrid;align-content:start;margin:0}
 .crow>.col>*{min-width:0}
+.proj .crow>.col.notx{display:block;grid-row:auto}
+.proj .crow>.col.notx>div:empty{display:none}
+.proj .crow>.col.notx>.cimgs{margin-top:0}
 .crow>.solo{grid-row:1/span 5;align-self:start}
+.crow>.solo.bot{align-self:end}
+.crow>.solo.mid{align-self:center}
 .cimgs{display:grid;gap:var(--g);align-self:start;margin-top:18px}
 .cimgs.g2{grid-template-columns:1fr 1fr}
 .cimgs.box{aspect-ratio:var(--box)}

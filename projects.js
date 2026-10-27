@@ -27,7 +27,7 @@ const P = [
     ],
     chapters: [
       { title: "Le sale", rows: [
-        { g: "", items: [{ img: "esploso|Esploso assonometrico", pad: true }, { img: "piantagen|Pianta generale", pad: true }] },
+        { g: "", items: [{ img: "esploso|Esploso assonometrico", bare: true }, { img: "piantagen|Pianta generale", pad: true }] },
         { g: "2fr 3fr", items: [
           { h: "Prima sala", sub: "Quotidianità I: il vasellame", t: "La sala esplora la quotidianità attraverso il vasellame, affiancando reperti etruschi alle opere di Picasso, Gio Ponti e Mario Schifano. Le corrispondenze formali e concettuali mostrano come l’eredità mediterranea attraversi la storia del design e dell’arte moderna.", note: "Confine netto e definito, percorso obbligato" },
           "sala1|Prima sala",
@@ -111,29 +111,44 @@ const P = [
     intro: [
       { h: "Sito di progetto", sub: "Cascina Linterno", t: "Un luogo che raccoglie secoli di storia. Situata a Milano in via Fratelli Zoia, presso il Parco delle Cave, accoglie inizialmente una comunità di templari. Già nel 1154 viene citata in una pergamena con il nome di “Infernum”; nel XII secolo era un luogo di passaggio, crocevia di strade di pellegrinaggio.", grid: true, imgs: ["sito|Cascina Linterno oggi", "storia|Cascina Linterno in un’incisione storica"] },
       { h: "Concept", t: "UNO + UNO si basa sull’unità singola e sull’unione di quest’ultima ad altre unità uguali. Il quadrato è un sistema di linee rette che si intersecano per definire uno spazio ordinato e simmetrico, che esprime armonia ed equilibrio. La perfetta unione tra questi elementi è rappresentata da una griglia regolare di modulo 60 × 60 cm: una rappresentazione visiva della logica, basata su principi di ordine e coerenza.", grid: true, imgs: [{ img: "c1|Ripetizione", pad: true }, { img: "c2|Forma chiusa", pad: true }, { img: "c3|Enfasi", pad: true }, { img: "c4|Ortogonalità", pad: true }] },
-      { h: "Tema", sub: "Cohousing", t: "Il cohousing nasce in Danimarca negli anni Sessanta: nel 1964 l’architetto Jan Gudmand-Høyer propone un nuovo tipo di abitazione in cui le famiglie condividono cucine, sale comuni e giardini, mantenendo la propria privacy. Abitazioni private con servizi e spazi condivisi, in equilibrio tra il rispetto della privacy e una vita sociale e comunitaria.", imgs: [{ img: "tema|Abitare insieme", natural: true }] },
+      { h: "Tema", sub: "Cohousing", t: "Il cohousing nasce in Danimarca negli anni Sessanta: nel 1964 l’architetto Jan Gudmand-Høyer propone un nuovo tipo di abitazione in cui le famiglie condividono cucine, sale comuni e giardini, mantenendo la propria privacy. Abitazioni private con servizi e spazi condivisi, in equilibrio tra il rispetto della privacy e una vita sociale e comunitaria.", imgs: ["tema|Abitare insieme"] },
     ],
     chapters: [
       { title: "Pianta e sezione", rows: [
-        { g: "3fr 2fr", items: [{ img: "pianta|Pianta e sezione della cascina", pad: true }, { h: "Caso studio", sub: "Superstudio", t: "Superstudio è stato un gruppo di architetti italiani fondato a Firenze nel 1966 da Adolfo Natalini e Cristiano Toraldo di Francia. Inserito nel movimento dell’architettura radicale, il collettivo era profondamente critico nei confronti del modernismo funzionalista e della mercificazione dell’architettura. Simbolo di questo pensiero è il “Monumento Continuo”, una struttura immaginaria che si estende all’infinito sul pianeta.", grid: true, imgs: [{ img: "super1|Superstudio", natural: true }, { img: "super2|Superstudio, Monumento Continuo", natural: true }] }] },
+        { g: "3fr 2fr", items: [{ img: "pianta|Pianta e sezione della cascina", pad: true }, { h: "Caso studio", sub: "Superstudio", t: "Superstudio è stato un gruppo di architetti italiani fondato a Firenze nel 1966 da Adolfo Natalini e Cristiano Toraldo di Francia. Inserito nel movimento dell’architettura radicale, il collettivo ha rivoluzionato il panorama architettonico e culturale degli anni ’60 e ’70. Il loro approccio era profondamente critico nei confronti del modernismo funzionalista e della crescente mercificazione dell’architettura, proponendo invece un’idea visionaria che utilizzava l’architettura come mezzo per esplorare tematiche filosofiche, sociali ed estetiche. Simbolo di questo pensiero è “Monumento Continuo”, una struttura immaginaria che si estende all’infinito sul pianeta.", imgs: [{ img: "super1|Superstudio", natural: true }, { img: "super2|Superstudio, Monumento Continuo", natural: true }] }] },
       ] },
-      { title: "Corte interna", t: "La corte interna è il luogo centrale di socialità, condivisione e relax, dove gli abitanti possono incontrarsi, organizzare eventi e stare all’aria aperta. Sulla corte si affacciano spazi aperti al pubblico, come una biblioteca e un bar, che rendono il complesso simile a un piccolo villaggio. Ispirata alla piazza italiana, la corte è pavimentata in sanpietrini su una griglia ortogonale di 240 × 240 cm. Il verde è racchiuso in grandi vasi che diventano sedute; gazebo leggeri accolgono tavoli e sedie, e al centro una vasca d’acqua ricorda le fontane delle piazze italiane.", rows: [
-        { g: "1fr 1fr", items: [{ img: "corte|Assonometria della corte", pad: true }, { img: "cortepl|Pianta della corte, griglia 240 × 240 cm", pad: true }] },
-        { g: "1fr 1fr", items: ["corte1|Il gazebo", "corte2|La corte, bianco e nero"] },
+      { title: "Corte interna", rows: [
+        // text column exactly as wide as one of the three images below
+        { g: "calc((100% - 2 * var(--g)) / 3) 7fr 2fr", items: [
+          { t: "La corte interna di Cascina Linterno rappresenta un luogo centrale di socialità, condivisione e relax, dove gli abitanti possono incontrarsi, organizzare eventi, scambiare idee e stare all’aria aperta. All’interno della Cascina sono presenti numerose aree aperte ad un pubblico esterno, come una biblioteca ed un bar, che si affacciano sulla corte centrale e che rendono il complesso simile ad un piccolo villaggio. Da un punto di vista progettuale, la corte è ispirata alla tipica piazza italiana ed è ricoperta da una pavimentazione costituita da sanpietrini, in una griglia regolare ortogonale di modulo 240 x 240 centimetri. Il verde è racchiuso all’interno di grandi vasi, anch’essi ortogonali e risultanti da un’estrusione della griglia principale, sui quali sono disposte delle sedute. Popolano l’ambiente una serie di gazebo attrezzati con tavoli e sedie, leggeri e resistenti, pensati per una veloce partita a carte, una tranquilla conversazione o del semplice relax. Nel centro geometrico della corte è infine presente una grande vasca d’acqua, a ricordare le fontane spesso presenti nelle principali piazze italiane." },
+          { img: "corte|Assonometria della corte", bare: true },
+          { img: "cortetag|La corte nella pianta della cascina", bare: true, top: true },
+        ] },
+        // three images of the same size side by side
+        { g: "", items: [{ grid: ["cortedet|Dettaglio della pavimentazione, griglia 240 × 240 cm", "cortecol|La corte", "cortegaz|Il gazebo"], c: 3, cell: 1.3 }] },
       ] },
-      { title: "Bar", t: "Il bar rappresenta l’estremizzazione dell’idea progettuale di griglia e quadrato. Ispirato alla mostra “Between the lines” di Luigi Ghirri a Casa Mutina Milano, presenta arredi progettati appositamente, dai colori accesi e completamente ricoperti da piastrelle quadrate. Ogni superficie, dal bancone al pavimento, rispetta le proporzioni della griglia principale: le aree colorate segnano tavoli, sedute e bancone, e i quadrati della griglia diventano una vera e propria estrusione.", rows: [
-        { g: "2fr 1fr 1fr", items: [{ img: "barpl|Pianta del bar", pad: true }, { img: "barsez|Sezione del bar", pad: true }, { img: "bartag|Il bar nella cascina", pad: true }] },
-        { g: "1fr 1fr 1fr", items: [{ img: "barconc|La griglia diventa estrusione", pad: true }, { img: "sedia|Seduta in piastrelle", pad: true }, { img: "tavolo|Tavolo in piastrelle", pad: true }] },
-        { g: "1fr 2fr 1fr", items: ["bar1|Dettaglio", "bar2|Le sedute", "bar3|Vista frontale"] },
-        { g: "1fr", items: ["bar4|Il bar, vista d’insieme"] },
+      { title: "Bar", rows: [
+        // same format as "Corte interna": text as wide as one image below, drawings in a box as big as the
+        // court axonometry (r), key plan top right
+        { g: "calc((100% - 2 * var(--g)) / 3) 7fr 2fr", items: [
+          { t: ["Il bar di Cascina Linterno rappresenta l’estremizzazione dell’idea progettuale di griglia e quadrato. Ispirato dalla mostra “Between the lines” di Luigi Ghirri a Casa Mutina Milano, il bar presenta arredi progettati appositamente per l’ambiente, dai colori accesi e completamente ricoperti da piastrelle quadrate. Ogni superficie, dal bancone al pavimento, è rivestita da piastrelle quadrate che rispettano ancora una volta le proporzioni della griglia principale. Il bar di Cascina Linterno vuole rappresentare un esempio senza precedenti, ed essere visto come una curiosità e un’esperienza, in grado di avvicinare le persone a questo centro.", "Griglia di modulo 60 × 60 centimetri. Qui le aree colorate segnano la presenza di tavoli, sedute e del bancone bar. In questa zona i quadrati della griglia diventano una vera e propria estrusione."] },
+          { img: "barmix|Pianta, sezione e piante concept del bar", bare: true, r: 1.226 },
+          { img: "bartag|Il bar nella cascina", bare: true, top: true },
+        ] },
+        { g: "", items: [{ grid: ["bar1|Dettaglio", "bar2|Le sedute", "bar4|Il bar, vista d’insieme"], c: 3, cell: 1.3 }] },
       ] },
-      { title: "Alloggio", t: "Nella cascina sono presenti diverse tipologie di alloggio, dai piccoli spazi per soggiorni brevi fino a duplex in grado di ospitare tre persone. Tutti si basano sulla griglia di 60 × 60 cm, che divide gli spazi in zone funzionali e crea ordine geometrico e pulizia visiva. Gli arredi si avvicinano all’estetica razionalista: forme essenziali, materiali moderni, colori tenui e dettagli più vivaci nelle piastrelle.", rows: [
-        { g: "1fr 1fr 1fr", items: [{ img: "allpl|Pianta di un alloggio", pad: true }, { img: "allconc|Piante concept", pad: true }, { img: "alltag|L’alloggio nella cascina", pad: true }] },
-        { g: "2fr 1fr 1fr", items: [{ img: "allsez|Sezione dell’alloggio", pad: true }, "all1|La cucina", "all2|Dettaglio delle piastrelle"] },
+      { title: "Alloggio", rows: [
+        // same format as "Corte interna" and "Bar"
+        { g: "calc((100% - 2 * var(--g)) / 3) 7fr 2fr", items: [
+          { t: ["Nella cascina sono presenti diverse tipologie di alloggio, dai piccoli spazi per soggiorni brevi fino a duplex in grado di ospitare tre persone. Tutti si basano sulla griglia di 60 × 60 cm, che divide gli spazi in zone funzionali e crea ordine geometrico e pulizia visiva. Gli arredi si avvicinano all’estetica razionalista: forme essenziali, materiali moderni, colori tenui e dettagli più vivaci nelle piastrelle.", "Griglia regolare ortogonale formata da quadrati di modulo 60 × 60 centimetri. Lo spazio viene modellato dalla griglia e vengono così a formarsi diverse zone funzionali. I quadrati colorati indicano il collocamento di elementi d’arredo e materiali che seguono la griglia."] },
+          { img: "allmix|Sezione, pianta e piante concept dell’alloggio", bare: true, r: 1.226 },
+          { img: "alltag|L’alloggio nella cascina", bare: true, top: true, r: 1.3678 },
+        ] },
+        { g: "", items: [{ grid: ["all1|Dettaglio del tavolo", "all2|Il soggiorno", "all3|La cucina"], c: 3, cell: 1.3 }] },
       ] },
       { title: "Mostra e modello", rows: [
-        { g: "2fr 1fr 1fr", items: ["mod1|Modello", "mostra1|Il progetto in mostra", "mostra2|Il progetto in mostra"] },
-        { g: "1fr 1fr", items: ["mod2|Modello, alloggi", "mod3|Modello, la corte"] },
+        { g: "1fr 1fr", items: ["mod2|Modello, alloggi", "mod1|Modello"] },
+        { g: "2fr 1fr 1fr", items: ["mod3|Modello, la corte", "mostra1|Il progetto in mostra", "mostra2|Il progetto in mostra"] },
       ] },
     ],
   },
@@ -147,25 +162,25 @@ const P = [
     intro: [
       { h: "Sito di progetto", sub: "Lago Ghedina", t: "Il progetto si colloca presso il Lago Ghedina, nelle vicinanze di Cortina d’Ampezzo, in un contesto alpino caratterizzato dalla presenza di boschi e dal rapporto diretto con lo specchio d’acqua. Il sito, ai piedi delle Tofane, presenta un ambiente raccolto e definito, in cui gli elementi naturali costituiscono il principale riferimento per l’intervento progettuale.", grid: true, imgs: ["map1|Inquadramento territoriale", "map2|Il lago", "map3|L’area di progetto nel bosco"] },
       { h: "Tema", sub: "Frank Lloyd Wright", t: "Frank Lloyd Wright nacque nel 1867 a Richland Center, Wisconsin, e nel 1887 si trasferì a Chicago come allievo di Sullivan. Credeva che l’architetto dovesse avere un controllo completo del progetto, sugli interni come sugli esterni. Le sue opere sono caratterizzate dall’uso attento della luce naturale, da materiali grezzi come mattoni e legno, da spazi continui sviluppati in orizzontale con grandi aperture e da un’ottima organicità con l’esterno.", imgs: ["wright|Studi sulle architetture di Wright"] },
-      { h: "Casi studio", t: ["<b>Layer House</b> — Progetto architettonico concepito da Snøhetta, studio norvegese di design e architettura rinomato per le sue opere all’avanguardia.", "<b>Marmomacc meets Design</b> — La mostra ha illustrato i risultati del progetto “Mutable Spirit”, una sfida alla capacità di adattamento di imprese e designer, con l’obiettivo di celebrare il marmo come materiale versatile e trasformabile."], imgs: ["m1|Modello, la luce attraverso il legno"] },
+      { h: "Casi studio", t: ["<b>Layer House</b> — Progetto architettonico concepito da Snøhetta, studio norvegese di design e architettura rinomato per le sue opere all’avanguardia.", "<b>Marmomacc meets Design</b> — La mostra ha illustrato i risultati del progetto “Mutable Spirit”, una sfida alla capacità di adattamento di imprese e designer, con l’obiettivo di celebrare il marmo come materiale versatile e trasformabile."], imgs: ["layer|Layer House, Snøhetta"] },
     ],
     chapters: [
       { title: "Pianta e sezioni", rows: [
-        { g: "1fr 1fr", items: [{ img: "pt|Pianta piano terra", pad: true }, { img: "p1|Pianta primo piano", pad: true }] },
-        { g: "1fr 1fr", items: ["sez1|Sezione longitudinale", "sez2|Sezione longitudinale, zona giorno"] },
+        // one 2-column grid: plans and sections share the same centre line and gaps
+        { g: "", items: [{ grid: [{ img: "pt|Pianta piano terra", pad: true }, { img: "p1|Pianta primo piano", pad: true }, "sez1|Sezione longitudinale", "sez2|Sezione longitudinale, zona giorno"], c: 2 }] },
         { g: "1fr 1fr 1fr", items: ["sez3|Sezione trasversale", "prosp2|Prospetto, lato corto", "prosp3|Prospetto frontale"] },
       ] },
       { title: "Terrazzamento esterno", rows: [
         { g: "1fr 1fr", items: ["alto|Pianta del terrazzamento", "prosp1|Prospetto, lato lungo"] },
-        { g: "1fr 1fr", items: ["terr|Modello, il terrazzamento verso il lago", "terrbn|Modello, bianco e nero"] },
+        { g: "1fr 1fr", items: ["terr|Modello, il terrazzamento verso il lago", "altalene|Modello, le altalene"] },
       ] },
       { title: "Interni", rows: [
         { g: "3fr 2fr", items: ["soggiorno|Soggiorno", { img: "sk1|Schizzo del soggiorno", pad: true }] },
-        { g: "3fr 2fr 1fr 2fr", items: ["cucina|Cucina", "bagno|Bagno", { img: "sk2|Studio della scala", pad: true }, { img: "sk3|Schizzo, la seduta sospesa", pad: true }] },
+        { g: "3fr 2fr 1fr 2fr", items: ["cucina|Cucina", "bagno|Bagno", { img: "sk2|Studio della scala", pad: true }, "interno|Interno della Light House"] },
       ] },
       { title: "Modello", rows: [
         { g: "1fr 1fr", items: ["m2|Modello, notturno", "m6|Modello, sezione"] },
-        { g: "1fr 1fr 1fr", items: ["m3|Modello, dettaglio", "m4|Modello, le sedute", "m5|Modello, i terrazzi"] },
+        { g: "1fr 1fr 1fr", items: ["camino|Modello, il camino", "m4|Modello, le sedute", "m5|Modello, i terrazzi"] },
       ] },
     ],
   },
@@ -183,19 +198,19 @@ const P = [
     ],
     chapters: [
       { title: "Pianta del progetto", rows: [
-        { g: "1fr 1fr", items: [{ img: "pianta|Piante dell’edificio", pad: true, dk: true }, "master|Masterplan"] },
+        { g: "1fr 1fr", items: [{ img: "pianteW|Piante dell’edificio", bare: true }, "p500|Masterplan, scala 1:500"] },
         { g: "1fr 1fr 1fr", items: [{ img: "tab1|Avventure e paure", pad: true }, { img: "tab2|Avventure, paure e soluzioni", pad: true }, { img: "tema|Lo schema delle scritte", pad: true }] },
       ] },
       { title: "Gli spazi", rows: [
         { g: "1fr 1fr 1fr", items: [
-          { h: "Spazio interno-esterno", imgs: [{ img: "sk1|Schizzo", pad: true }, "intest|Spazio interno-esterno"] },
-          { h: "Spazio gioco", imgs: [{ img: "sk2|Schizzo", pad: true }, "gioco1|Spazio gioco"] },
-          { h: "Chiesetta", imgs: [{ img: "sk3|Schizzo", pad: true }, "chiesetta|Chiesetta"] },
+          { h: "Spazio interno-esterno", imgs: [{ img: "sk1|Schizzo", pad: true }, { img: "intest|Spazio interno-esterno", r: 1 }] },
+          { h: "Spazio gioco", imgs: [{ img: "sk2|Schizzo", pad: true }, { img: "gioco1|Spazio gioco", r: 1 }] },
+          { h: "Chiesetta", imgs: [{ img: "sk3|Schizzo", pad: true }, { img: "chiesetta|Chiesetta", r: 1 }] },
         ] },
         { g: "1fr 1fr 1fr", items: [
-          { h: "Dormitorio bambini", imgs: [{ img: "sk4|Schizzo", pad: true }, "dormitorio|Dormitorio bambini"] },
-          { h: "Spazio gioco", imgs: [{ img: "sk5|Schizzo", pad: true }, "gioco2|Spazio gioco"] },
-          { h: "Capannina", imgs: [{ img: "sk6|Schizzo", pad: true }, "capannina|Capannina"] },
+          { h: "Dormitorio bambini", imgs: [{ img: "sk4|Schizzo", pad: true }, { img: "dormitorio|Dormitorio bambini", r: 1 }] },
+          { h: "Spazio gioco", imgs: [{ img: "sk5|Schizzo", pad: true }, { img: "gioco2|Spazio gioco", r: 1 }] },
+          { h: "Capannina", imgs: [{ img: "sk6|Schizzo", pad: true }, { img: "capannina|Capannina", r: 1 }] },
         ] },
       ] },
       { title: "Dettagli", rows: [
@@ -211,14 +226,14 @@ const P = [
     teachers: "Prof. Giorgio Buratti; cultore della materia Massimo Barbieri",
     team: ["Jacopo Dellanoce", "Irene Acerboni", "Marco Braga"],
     intro: [
-      { h: "Sito di progetto", sub: "Via Melzo 12, Porta Venezia", t: "Il KanPai è un locale nel cuore di Porta Venezia, a Milano. Un tempo officina meccanica, lo spazio ha mantenuto parte della sua anima originale grazie a dettagli estetici che riprendono le finiture grezze, creando un contrasto tra passato industriale e design moderno.", imgs: [{ img: "sito|Inquadramento urbano", pad: true }] },
+      { h: "Sito di progetto", sub: "Via Melzo 12, Porta Venezia", t: "Il KanPai è un locale nel cuore di Porta Venezia, a Milano. Un tempo officina meccanica, lo spazio ha mantenuto parte della sua anima originale grazie a dettagli estetici che riprendono le finiture grezze, creando un contrasto tra passato industriale e design moderno.", imgs: [{ img: "sito|Inquadramento urbano", pos: "50% 40%" }] },
       { h: "Concept", sub: "Izakaya", t: "L’idea alla base del KanPai è riproporre l’esperienza dell’izakaya giapponese, un locale tradizionale pensato come punto di ritrovo serale per rilassarsi dopo una lunga giornata di lavoro. Questa filosofia si riflette nell’atmosfera conviviale e nell’offerta: cocktail artigianali ispirati al Giappone e piatti fusion.", imgs: [{ img: "logo|Il logo", pad: true }] },
       { h: "Tema", sub: "Japanese hangout", t: "Un ambiente intimo e ricercato, che unisce l’eleganza contemporanea all’autentica tradizione giapponese: perfetto per una serata rilassata o un drink sofisticato, una meta per chi desidera immergersi nel design e nella cultura giapponese.", imgs: ["r1bn|Facciata, bianco e nero"] },
     ],
     chapters: [
       { title: "Pianta, sezioni ed esploso", rows: [
-        { g: "1fr 1fr", items: [{ img: "pianta|Pianta, scala 1:100", pad: true }, { img: "esploso|Esploso assonometrico", pad: true }] },
-        { g: "1fr 1fr 1fr", items: [{ img: "sez1|Sezione A-A", pad: true }, { img: "sez2|Sezione B-B", pad: true }, { img: "sez3|Sezione C-C", pad: true }] },
+        { g: "1fr 1fr", items: [{ img: "pianta|Pianta, scala 1:100", bare: true }, { img: "esploso|Esploso assonometrico", bare: true }] },
+        { g: "1fr 1fr 1fr", items: [{ img: "sez1|Sezione A-A", bare: true }, { img: "sez2|Sezione B-B", bare: true }, { img: "sez3|Sezione C-C", bare: true }] },
       ] },
       { title: "Gli ambienti", rows: [
         { g: "1fr", items: ["r1|Facciata su via Melzo"] },
