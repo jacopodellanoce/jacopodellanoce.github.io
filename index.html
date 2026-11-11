@@ -272,8 +272,21 @@ html.shot .fg img,html.shot .px-l h1 .c{transform:none}
   .wdesc .meta{display:none}
   .wlab{top:76px}
   .wstage{touch-action:pan-y}
-  .prof{grid-template-columns:1fr}
+  /* swipe hint arrows (phones only, shown from JS) */
+  .warr{position:absolute;z-index:30;top:calc(30% + 52px + min(56vw,300px,34svh)*2/3);transform:translateY(-50%);width:44px;height:64px;display:grid;place-items:center;background:none;border:0;padding:0;color:var(--ink);opacity:.32;transition:opacity .35s}
+  .warr[hidden]{display:none}
+  .warr.l{left:calc(var(--gut) - 14px)}
+  .warr.r{right:calc(var(--gut) - 14px)}
+  .warr svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+  .warr.off{opacity:0;pointer-events:none}
+  .warr:active{opacity:.6}
+  /* profile: smaller portrait beside the bio, accordion full width below */
+  .prof{grid-template-columns:minmax(0,38fr) minmax(0,62fr);column-gap:16px;row-gap:0;align-items:start}
+  .prof>div:last-child{display:contents}
   .prof .left{position:static}
+  .prof .portrait{width:100%}
+  .prof .bio{font-size:16px;line-height:1.3;letter-spacing:-.01em;margin-bottom:32px}
+  .prof .acc{grid-column:1/-1}
   .ph{grid-template-columns:1fr}
   .cols{grid-template-columns:1fr!important}
   .row{grid-template-columns:1fr 1fr!important}
@@ -288,7 +301,6 @@ html.shot .fg img,html.shot .px-l h1 .c{transform:none}
   .wcount .lbl{display:none}
   .hd .grid{gap:12px}
   .hd nav a{font-size:12.5px}
-  .bio{font-size:21px}
   .acc-b{font-size:26px}
   .ch-h h2{font-size:34px}
   .ph h1{font-size:clamp(46px,14vw,64px)}
@@ -429,6 +441,8 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
       <div class="track" id="track"></div>
       <div class="wdesc"><p id="wdesc"></p><div class="meta sm mute" id="wmeta"></div></div>
       <div class="wimg" id="wimg" role="link" tabindex="0" aria-label="Apri il progetto" data-i18n-a="aria-label:open_aria"><span class="open" data-i18n="open_proj">Apri il progetto ↗</span></div>
+      <button class="warr l" id="warrL" type="button" aria-label="Progetto precedente" data-i18n-a="aria-label:prev_aria" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg></button>
+      <button class="warr r" id="warrR" type="button" aria-label="Progetto successivo" data-i18n-a="aria-label:next_aria" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8"/></svg></button>
       <div class="wcount"><span class="lbl" id="wcat"></span><span class="n"><span id="wn">01</span><span>06</span></span></div>
     </div>
   </section>
@@ -439,24 +453,32 @@ html.light .proj{--panel:rgba(20,20,20,.03);--panel2:rgba(20,20,20,.05);--warm:v
     <div class="prof">
       <div class="left rv"><img class="portrait" src="img/ritratto.webp" alt="Ritratto di Jacopo Dellanoce" data-i18n-a="alt:portrait" loading="lazy"></div>
       <div>
-        <p class="bio rv" data-i18n="bio">Sono uno studente di Interior Design al Politecnico di Milano. Il mio percorso nasce dalla passione per il disegno e per la progettazione come processo che traduce un’idea in un’opera concreta. Mi interessano l’exhibit design e la riqualificazione di spazi urbani in disuso, temi centrali per una progettazione sostenibile.</p>
+        <p class="bio rv" data-i18n="bio">Studente di Design degli Interni al Politecnico di Milano, laurea prevista a marzo 2027. Progetto spazi che abbiano qualcosa da raccontare: parto dalle persone che li vivranno e dalla storia del luogo per arrivare a un concept narrativo, che traduco in percorsi, luce, materiali e arredi su misura. La mia tesi è dedicata al lighting design.</p>
         <div class="acc rv" id="acc">
           <div class="acc-i open"><button class="acc-b" aria-expanded="true" data-k="acc_edu">Formazione <em>+</em></button><div class="acc-c"><div><div class="in">
-            <span class="mute" data-i18n="edu_now">2023 — oggi</span><span data-i18n="edu_poli">Politecnico di Milano, Design degli Interni</span>
+            <span class="mute" data-i18n="edu_now">2023 — marzo 2027 (prevista)</span><span data-i18n="edu_poli">Laurea triennale in Design degli Interni, Politecnico di Milano</span>
+            <span class="mute" data-i18n="edu_thesis_l">Tesi</span><span data-i18n="edu_thesis">Lighting design per la mostra <i>Unseen</i> · Relatore: Prof. Paolo Maria Fumagalli</span>
             <span class="mute" data-i18n="edu_dip">Diploma</span><span data-i18n="edu_school">Liceo Scientifico Vittorio Veneto, Milano</span>
           </div></div></div></div>
           <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_soft">Software <em>+</em></button><div class="acc-c"><div><div class="in">
-            <div class="chips"><span>AutoCAD</span><span>Revit</span><span>ArchiCAD</span><span>Rhino</span><span>V-Ray</span><span>Blender</span><span>Photoshop</span><span>Illustrator</span><span>InDesign</span><span>Figma</span><span>Miro</span></div>
+            <span class="mute" data-i18n="soft_cad">CAD e BIM</span><span>AutoCAD · Revit · ArchiCAD</span>
+            <span class="mute" data-i18n="soft_3d">3D e rendering</span><span data-i18n="soft_blender">Rhino · V-Ray · Blender (intermedio)</span>
+            <span class="mute" data-i18n="soft_gr">Grafica e impaginazione</span><span>Photoshop · Illustrator · InDesign</span>
+            <span class="mute" data-i18n="soft_light">Illuminotecnica</span><span>DIALux · Relux</span>
+            <span class="mute" data-i18n="soft_web">Web e AI</span><span data-i18n="soft_web_v">Sito portfolio realizzato da me (coding assistito da AI) · strumenti di AI</span>
           </div></div></div></div>
           <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_lang">Lingue <em>+</em></button><div class="acc-c"><div><div class="in">
-            <span class="mute" data-i18n="lang_it">Italiano</span><span data-i18n="lang_it_lv">Madrelingua (C2)</span>
-            <span class="mute" data-i18n="lang_en">Inglese</span><span data-i18n="lang_en_lv">Intermedio-alto (B2)</span>
+            <span class="mute" data-i18n="lang_it">Italiano</span><span data-i18n="lang_it_lv">Madrelingua</span>
+            <span class="mute" data-i18n="lang_en">Inglese</span><span data-i18n="lang_en_lv">B2 · certificazione IELTS</span>
           </div></div></div></div>
-          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_method">Metodo <em>+</em></button><div class="acc-c"><div><div class="in">
-            <p data-i18n="method">Tutti i progetti sono nati in gruppo: il lavoro in team mi ha insegnato confronto, ascolto e sintesi tra visioni diverse.</p>
+          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_method">Metodo e competenze <em>+</em></button><div class="acc-c"><div><div class="in">
+            <p data-i18n="method">Tutti i progetti sono nati in team di tre-cinque persone: ho imparato ad ascoltare, confrontare visioni diverse e arrivare a sintesi condivise.</p>
+            <span class="mute" data-i18n="hs_mod">Modelli fisici</span><span data-i18n="hs_mod_v">Modellista principale nei progetti di gruppo</span>
+            <span class="mute" data-i18n="hs_3dp">Stampa 3D</span><span data-i18n="hs_3dp_v">Stampa di dettagli per modelli, oggetti e progetti personali</span>
+            <span class="mute" data-i18n="hs_sk">Schizzi a mano</span><span data-i18n="hs_sk_v">Schizzi di concept e studi spaziali</span>
           </div></div></div></div>
-          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_out">Fuori dallo studio <em>+</em></button><div class="acc-c"><div><div class="in">
-            <p data-i18n="out">Cinema, musica, mostre e musei: osservo come vengono allestiti e il rapporto tra opere e spazio.</p>
+          <div class="acc-i"><button class="acc-b" aria-expanded="false" data-k="acc_out">Interessi <em>+</em></button><div class="acc-c"><div><div class="in">
+            <p data-i18n="out">Lighting design, cinema, musica, mostre e musei: osservo sempre come le opere vengono illuminate e allestite.</p>
           </div></div></div></div>
         </div>
       </div>
@@ -615,7 +637,11 @@ wimg.addEventListener("click",()=>{ if(performance.now()-swMoved<350) return; op
   stage.addEventListener("touchend",end); stage.addEventListener("touchcancel",end);
 }
 wimg.addEventListener("keydown",e=>{if(e.key==="Enter")openProject(Math.round(wpos),wims[Math.round(wpos)]);});
+const warrL=$("warrL"), warrR=$("warrR");
+warrL.addEventListener("click",()=>{ swT=clamp(Math.round(swT)-1,0,P.length-1); });
+warrR.addEventListener("click",()=>{ swT=clamp(Math.round(swT)+1,0,P.length-1); });
 function sizeWorks(){
+  warrL.hidden=warrR.hidden=!SWIPE();
   works.style.height=SWIPE()?"100svh":(P.length*70+30)+"vh";
   const h=document.querySelector(".wlab .mute"); h.dataset.i18n=SWIPE()?"works_swipe":"works_hint"; h.textContent=t(h.dataset.i18n);
 }
@@ -635,7 +661,8 @@ function tick(now){
   // works
   const r=works.getBoundingClientRect(), tot=works.offsetHeight-innerHeight;
   let prog;
-  if(SWIPE()){ if(!swDrag) sw+=(swT-sw)*.16; prog=sw/(P.length-1); wpos=WF ?? clamp(sw,-.35,P.length-1+.35); }
+  if(SWIPE()){ if(!swDrag) sw+=(swT-sw)*.16; prog=sw/(P.length-1); wpos=WF ?? clamp(sw,-.35,P.length-1+.35);
+    const ai=Math.round(wpos); warrL.classList.toggle("off",ai<=0); warrR.classList.toggle("off",ai>=P.length-1); }
   else { prog=clamp(-r.top/tot,0,1); wpos=WF ?? prog*(P.length-1); }
   const cw=innerWidth<860?innerWidth*.62:innerWidth*.3;
   track.style.setProperty("--cw",cw+"px");
